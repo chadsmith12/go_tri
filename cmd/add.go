@@ -1,12 +1,13 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
 
+	"github.com/adrg/xdg"
+	"github.com/chadsmith12/go_tri/todo"
 	"github.com/spf13/cobra"
 )
 
@@ -15,9 +16,7 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a new todo item",
 	Long: `Add will create a new todo item and add it onto the list`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add called")
-	},
+	Run: addRun,
 }
 
 func init() {
@@ -32,4 +31,22 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func addRun(cmd *cobra.Command, args []string) {
+	items := []todo.Item{}
+	for _, x := range args {
+		items = append(items, todo.Item{Text: x})
+	}
+
+	dataFilePath, dataErr := xdg.DataFile("go_tri/.tridos.json")
+	if dataErr != nil {
+		fmt.Errorf("%v", dataErr)
+	}
+
+
+	saveErr := todo.SaveItems(dataFilePath, items)
+	if saveErr != nil {
+		fmt.Errorf("%v", saveErr)
+	}
 }
