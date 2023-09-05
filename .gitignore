@@ -1,0 +1,9 @@
+# Compiled Go binary files
+*.exe
+*.out
+*.test
+*.prof
+
+/dist/
+/build/
+
