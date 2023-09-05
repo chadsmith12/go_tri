@@ -6,9 +6,9 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/chadsmith12/go_tri/path"
 	"github.com/chadsmith12/go_tri/todo"
 	"github.com/spf13/cobra"
-	"github.com/adrg/xdg" 
 )
 
 // listCmd represents the list command
@@ -39,7 +39,7 @@ func init() {
 }
 
 func listRun(cmd *cobra.Command, args []string) {
-	filePath, dataFileErr := xdg.DataFile("go_tri/.tridos.json")
+	filePath, dataFileErr := path.DataFilePath()
 	if dataFileErr != nil {
 		fmt.Errorf("%v", dataFileErr)
 	}

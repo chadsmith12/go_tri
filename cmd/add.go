@@ -6,8 +6,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/adrg/xdg"
 	"github.com/chadsmith12/go_tri/todo"
+	"github.com/chadsmith12/go_tri/path"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +39,7 @@ func addRun(cmd *cobra.Command, args []string) {
 		items = append(items, todo.Item{Text: x})
 	}
 
-	dataFilePath, dataErr := xdg.DataFile("go_tri/.tridos.json")
+	dataFilePath, dataErr := path.DataFilePath()
 	if dataErr != nil {
 		fmt.Errorf("%v", dataErr)
 	}
