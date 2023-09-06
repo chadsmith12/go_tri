@@ -6,6 +6,8 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+	"text/tabwriter"
 
 	"github.com/chadsmith12/go_tri/path"
 	"github.com/chadsmith12/go_tri/todo"
@@ -45,5 +47,13 @@ func listRun(cmd *cobra.Command, args []string) {
 		log.Fatal(fmt.Errorf("%v", err))
 	}
 
-	fmt.Println(items)
+	writer := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
+
+	for _, item := range items {
+		priorityString := item.PrettyP()
+		label := item.Label()
+		itemString := label + "\t" + priorityString + "\t" + item.Text + "\t\n"
+		fmt.Fprintf(writer, itemString)
+	}
+	writer.Flush()
 }
