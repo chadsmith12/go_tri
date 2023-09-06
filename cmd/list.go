@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/chadsmith12/go_tri/path"
 	"github.com/chadsmith12/go_tri/todo"
@@ -39,13 +40,9 @@ func init() {
 }
 
 func listRun(cmd *cobra.Command, args []string) {
-	filePath, dataFileErr := path.DataFilePath()
-	if dataFileErr != nil {
-		fmt.Errorf("%v", dataFileErr)
-	}
-	items, err := todo.ReadItems(filePath)
+	items, err := todo.ReadItems(path.DataFile)
 	if (err != nil){
-		fmt.Errorf("%v", err)
+		log.Fatal(fmt.Errorf("%v", err))
 	}
 
 	fmt.Println(items)

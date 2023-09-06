@@ -5,9 +5,10 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
-	"github.com/chadsmith12/go_tri/todo"
 	"github.com/chadsmith12/go_tri/path"
+	"github.com/chadsmith12/go_tri/todo"
 	"github.com/spf13/cobra"
 )
 
@@ -39,14 +40,8 @@ func addRun(cmd *cobra.Command, args []string) {
 		items = append(items, todo.Item{Text: x})
 	}
 
-	dataFilePath, dataErr := path.DataFilePath()
-	if dataErr != nil {
-		fmt.Errorf("%v", dataErr)
-	}
-
-
-	saveErr := todo.SaveItems(dataFilePath, items)
+	saveErr := todo.SaveItems(path.DataFile, items)
 	if saveErr != nil {
-		fmt.Errorf("%v", saveErr)
+		log.Fatal(fmt.Errorf("%v", saveErr))
 	}
 }
