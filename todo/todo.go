@@ -8,7 +8,31 @@ import (
 type Item struct {
 	Text string
 	Priority int
+	Done bool
 	position int
+}
+
+// ByPriority implements the sort.Interface for []Item based 
+// on the Priority and position field
+type ByPriority []Item
+
+func (items ByPriority) Len() int {
+	return len(items)
+}
+
+func (items ByPriority) Swap(i, j int) {
+	items[i], items[j] = items[j], items[i]
+}
+
+func (items ByPriority) Less(i, j int) bool {
+	if items[i].Done != items[j].Done {
+		return items[i].Done
+	}
+
+	if items[i].Priority == items[j].Priority {
+		return items[i].Priority < items[j].Priority
+	}
+	return items[i].position < items[j].position
 }
 
 func (item *Item) SetPriority(priority int) {
@@ -31,6 +55,14 @@ func (item *Item) PrettyP() string {
 	}
 
 	return " "
+}
+
+func (item *Item) PrettyDone() string {
+	if item.Done {
+		return "X"
+	}
+
+	return ""
 }
 
 func (item *Item) Label() string {
