@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/chadsmith12/go_tri/path"
 	"github.com/chadsmith12/go_tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // addCmd represents the add command
@@ -39,7 +39,7 @@ func init() {
 }
 
 func addRun(cmd *cobra.Command, args []string) {
-	items, readErr := todo.ReadItems(path.DataFile)
+	items, readErr := todo.ReadItems(viper.GetString("datafile"))
 	if readErr != nil {
 		log.Fatal(fmt.Errorf("%v", readErr))
 	}
@@ -49,7 +49,7 @@ func addRun(cmd *cobra.Command, args []string) {
 		items = append(items, item)
 	}
 
-	saveErr := todo.SaveItems(path.DataFile, items)
+	saveErr := todo.SaveItems(viper.GetString("datafile"), items)
 	if saveErr != nil {
 		log.Fatal(fmt.Errorf("%v", saveErr))
 	}

@@ -10,10 +10,11 @@ import (
 	"sort"
 	"text/tabwriter"
 
-	"github.com/chadsmith12/go_tri/path"
 	"github.com/chadsmith12/go_tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
+
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
@@ -43,7 +44,7 @@ func init() {
 }
 
 func listRun(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems(path.DataFile)
+	items, err := todo.ReadItems(viper.GetString("datafile"))
 	if (err != nil){
 		log.Fatal(fmt.Errorf("%v", err))
 	}

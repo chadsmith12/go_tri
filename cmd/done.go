@@ -9,9 +9,9 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/chadsmith12/go_tri/path"
 	"github.com/chadsmith12/go_tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // doneCmd represents the done command
@@ -36,8 +36,8 @@ func init() {
 	// doneCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func doneRun(cmd* cobra.Command, args []string){
-	items, err := todo.ReadItems(path.DataFile)
+func doneRun(cmd* cobra.Command, args []string) {
+	items, err := todo.ReadItems(viper.GetString("datafile"))
 	i, err := strconv.Atoi(args[0])
 
 	if err != nil {
@@ -48,7 +48,7 @@ func doneRun(cmd* cobra.Command, args []string){
 		items[i-1].Done = true
 		fmt.Printf("%q %v\n", items[i-1].Text, "marked done")
 		sort.Sort(todo.ByPriority(items))
-		todo.SaveItems(path.DataFile, items)
+		todo.SaveItems(viper.GetString("datafile"), items)
 	} else {
 		log.Println(i, "doesn't match any items")
 	}

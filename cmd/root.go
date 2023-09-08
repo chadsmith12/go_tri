@@ -6,9 +6,12 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/adrg/xdg"
 	"github.com/chadsmith12/go_tri/path"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -39,12 +42,27 @@ func init() {
 		fmt.Println("Unable to detect the default directory to use. Please set data file using --datafile")
 		os.Exit(1)
 	}
+
 	path.DataFile = filePath
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.go_tri.yaml)")
+	rootCmd.PersistentFlags().StringVar(&path.ConfigFile, "config", "", "Config file to use")
 	rootCmd.PersistentFlags().StringVar(&path.DataFile, "datafile", filePath, "Data file to store todos")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
+func initConfig() {
+	if path.ConfigFile != "" {
+		viper.SetConfigFile(path.ConfigFile)	
+	} else {
+		configPath := filepath.Join(xdg.ConfigHome, "go_tri")
+		viper.AddConfigPath(configPath)
+		viper.SetConfigName(".config")
+		viper.SetConfigType("ymal")
+	}
 
+	viper.AutomaticEnv()
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Println("Using config file: ", viper.ConfigFileUsed())
+	}
+}
