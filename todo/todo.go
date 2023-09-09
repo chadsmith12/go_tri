@@ -2,6 +2,7 @@ package todo
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"strconv"
 )
@@ -85,6 +86,10 @@ func SaveItems(filename string, items []Item) error {
 
 func ReadItems(filename string) ([]Item, error) {
 	data, readErr := os.ReadFile(filename)
+	if errors.Is(readErr, os.ErrNotExist) {
+		// files that don't exist might be new. ignore this error and return empty
+		return []Item{}, nil
+	}	
 	if readErr != nil {
 		return []Item{}, readErr
 	}
